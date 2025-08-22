@@ -15,4 +15,5 @@
   - Common Negative Themes in the Isolated Events: "never", "return", "rush"
 
 📊Tools: Python, Pandas, NLTK, TextBlob, Matplotlib
+
 📄[Read Full Report](https://github.com/Badhan-Prime25/TOE_Review_Analysis/blob/main/Customer%20Review%20Analysis.pdf)
