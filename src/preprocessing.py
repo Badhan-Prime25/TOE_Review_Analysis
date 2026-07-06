@@ -18,7 +18,7 @@ def tokenize(text):
     return word_tokenize(str(text))
 
 def open_file():
-    with open("customStopWords.txt", "r") as file:
+    with open("../Data/customStopWords.txt", "r") as file:
         lines = file.read().splitlines()
     return lines
 

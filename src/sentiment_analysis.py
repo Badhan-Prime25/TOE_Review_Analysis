@@ -3,34 +3,34 @@ import pandas as pd
 import seaborn
 from wordcloud import WordCloud
 
-import cleaningFunctions
+import preprocessing
 
-reviews = pd.read_csv("TOEreviews.csv")
+reviews = pd.read_csv("../Data/reviews.csv")
 data_dim = reviews.shape # Find the shape of Dataset
 cols = reviews.columns
 colsList = cols.tolist()
 
-reviewsNa = cleaningFunctions.check_null(reviews) # Removes all the Na Rows
+reviewsNa = preprocessing.check_null(reviews) # Removes all the Na Rows
 
-# Tokenize the data
+# Tokenize the Data
 reviewsNa = reviewsNa.copy() # Creates a copy of the db
-reviewsNa['tokenized'] = reviewsNa["Review"].apply(cleaningFunctions.tokenize) # tokenizes the Reviews
+reviewsNa['tokenized'] = reviewsNa["Review"].apply(preprocessing.tokenize) # tokenizes the Reviews
 
 # Remove StopWords & Punctuation
-reviewsNa['tokenized'] = reviewsNa["tokenized"].apply(cleaningFunctions.remove_stopwords)
-reviewsNa['tokenized'] = reviewsNa["tokenized"].apply(cleaningFunctions.remove_punctuation)
+reviewsNa['tokenized'] = reviewsNa["tokenized"].apply(preprocessing.remove_stopwords)
+reviewsNa['tokenized'] = reviewsNa["tokenized"].apply(preprocessing.remove_punctuation)
 
 # STEMMING
-reviewsNa['tokenized'] = reviewsNa["tokenized"].apply(cleaningFunctions.stemming)# Reduces word to base word (Removes suffixes and prefixes )
+reviewsNa['tokenized'] = reviewsNa["tokenized"].apply(preprocessing.stemming)# Reduces word to base word (Removes suffixes and prefixes )
 
 
 #reviewsNa['sentiment'] = reviewsNa["tokenized"].apply(cleaningFunctions.sentiment) # Providing the polarity and subjectivity
-reviewsNa['polarity'] = reviewsNa["tokenized"].apply(cleaningFunctions.polarity) # isolating the polarity
+reviewsNa['polarity'] = reviewsNa["tokenized"].apply(preprocessing.polarity) # isolating the polarity
 
 # Checking if it is +VE or -VE
 
-reviewsNa['comboPolarity'] = reviewsNa.apply(cleaningFunctions.combine,axis=1)
-reviewsNa['positive'] = reviewsNa["comboPolarity"].apply(cleaningFunctions.positive)# Give a Bool for +VE and -VE
+reviewsNa['comboPolarity'] = reviewsNa.apply(preprocessing.combine,axis=1)
+reviewsNa['positive'] = reviewsNa["comboPolarity"].apply(preprocessing.positive)# Give a Bool for +VE and -VE
 
 # Summation of +VE & -VE
 true_count = (reviewsNa['positive'] == True).sum()
@@ -82,10 +82,10 @@ positive_review  = reviewsNa[reviewsNa['positive'] == "Positive"].copy()
 negative_review = reviewsNa[reviewsNa['positive'] == "Negative"].copy()
 
 
-positive_review['tokenized'] = positive_review['tokenized'].apply(cleaningFunctions.spelling_correct)
-negative_review['tokenized'] = negative_review['tokenized'].apply(cleaningFunctions.spelling_correct)
-positive_review['tokenized'] = positive_review['tokenized'].apply(cleaningFunctions.remove_stopwords)
-negative_review['tokenized'] = negative_review['tokenized'].apply(cleaningFunctions.remove_stopwords)
+positive_review['tokenized'] = positive_review['tokenized'].apply(preprocessing.spelling_correct)
+negative_review['tokenized'] = negative_review['tokenized'].apply(preprocessing.spelling_correct)
+positive_review['tokenized'] = positive_review['tokenized'].apply(preprocessing.remove_stopwords)
+negative_review['tokenized'] = negative_review['tokenized'].apply(preprocessing.remove_stopwords)
 
 pos_words = [word for tokens in positive_review["tokenized"] for word in tokens]
 pos_text = " ".join(pos_words) # Joins all the +VE text together
